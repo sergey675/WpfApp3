@@ -1,0 +1,194 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+class User
+{
+    public string Login { get; set; }
+    public string Password { get; set; }
+    public string Name { get; set; }
+    public string Surname { get; set; }
+    public string Email { get; set; }
+    public string Id { get; set; }
+}
+
+class Program
+{
+    static string dataFolderPath = "User_Data";
+
+    static void Main()
+    {
+        Directory.CreateDirectory(dataFolderPath);
+
+        while (true)
+        {
+            Console.WriteLine("Меню:");
+            Console.WriteLine("1. Добавить пользователя");
+            Console.WriteLine("2. Редактировать пользователя");
+            Console.WriteLine("3. Удалить пользователя");
+            Console.WriteLine("4. Поиск по имени и email");
+            Console.WriteLine("5. Отобразить всех пользователей");
+            Console.WriteLine("6. Выход");
+
+            int choice = Convert.ToInt32(Console.ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    AddUser();
+                    break;
+                case 2:
+                    EditUser();
+                    break;
+                case 3:
+                    DeleteUser();
+                    break;
+                case 4:
+                    SearchUser();
+                    break;
+                case 5:
+                    DisplayAllUsers();
+                    break;
+                case 6:
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Неверный выбор. Повторите попытку.");
+                    break;
+            }
+        }
+    }
+
+    static void AddUser()
+    {
+        User user = new User();
+
+        Console.Write("Введите логин: ");
+        user.Login = Console.ReadLine();
+
+        Console.Write("Введите пароль: ");
+        user.Password = Console.ReadLine();
+
+        Console.Write("Введите имя: ");
+        user.Name = Console.ReadLine();
+
+        Console.Write("Введите фамилию: ");
+        user.Surname = Console.ReadLine();
+
+        Console.Write("Введите email: ");
+        user.Email = Console.ReadLine();
+
+        user.Id = Guid.NewGuid().ToString();
+
+        WriteToFile(user);
+    }
+
+    static void WriteToFile(User user)
+    {
+        string loginInfo = $"Логин: {user.Login}\tПароль: {user.Password}";
+        string nameInfo = $"Имя: {user.Name}\tФамилия: {user.Surname}";
+        string emailInfo = $"Email: {user.Email}\tId: {user.Id}";
+
+        File.WriteAllText(Path.Combine(dataFolderPath, $"{user.Id}_Login.txt"), loginInfo);
+        File.WriteAllText(Path.Combine(dataFolderPath, $"{user.Id}_Name.txt"), nameInfo);
+        File.WriteAllText(Path.Combine(dataFolderPath, $"{user.Id}_Email.txt"), emailInfo);
+
+        Console.WriteLine("Пользователь успешно добавлен.");
+    }
+
+    static void EditUser()
+    {
+        Console.WriteLine("Введите Id пользователя для редактирования:");
+        string userId = Console.ReadLine();
+
+        string loginInfo = File.ReadAllText(Path.Combine(dataFolderPath, $"{userId}_Login.txt"));
+        string nameInfo = File.ReadAllText(Path.Combine(dataFolderPath, $"{userId}_Name.txt"));
+        string emailInfo = File.ReadAllText(Path.Combine(dataFolderPath, $"{userId}_Email.txt"));
+
+        Console.WriteLine("Текущая информация о пользователе:");
+        Console.WriteLine(loginInfo);
+        Console.WriteLine(nameInfo);
+        Console.WriteLine(emailInfo);
+
+        Console.WriteLine("Введите новые данные:");
+
+        Console.Write("Логин: ");
+        string newLogin = Console.ReadLine();
+        Console.Write("Пароль: ");
+        string newPassword = Console.ReadLine();
+        Console.Write("Имя: ");
+        string newName = Console.ReadLine();
+        Console.Write("Фамилия: ");
+        string newSurname = Console.ReadLine();
+        Console.Write("Email: ");
+        string newEmail = Console.ReadLine();
+
+        User editedUser = new User
+        {
+            Login = newLogin,
+            Password = newPassword,
+            Name = newName,
+            Surname = newSurname,
+            Email = newEmail,
+            Id = userId
+        };
+
+        WriteToFile(editedUser);
+
+        Console.WriteLine("Пользователь успешно отредактирован.");
+    }
+
+    static void DeleteUser()
+    {
+        Console.WriteLine("Введите Id пользователя для удаления:");
+        string userId = Console.ReadLine();
+
+        File.Delete(Path.Combine(dataFolderPath, $"{userId}_Login.txt"));
+        File.Delete(Path.Combine(dataFolderPath, $"{userId}_Name.txt"));
+        File.Delete(Path.Combine(dataFolderPath, $"{userId}_Email.txt"));
+
+        Console.WriteLine("Пользователь успешно удален.");
+    }
+
+    static void SearchUser()
+    {
+        Console.WriteLine("Введите имя или email пользователя для поиска:");
+        string searchQuery = Console.ReadLine();
+
+        List<string> foundUsers = new List<string>();
+
+        foreach (var filePath in Directory.EnumerateFiles(dataFolderPath))
+        {
+            string fileContent = File.ReadAllText(filePath);
+            if (fileContent.Contains(searchQuery))
+            {
+                foundUsers.Add(fileContent);
+            }
+        }
+
+        if (foundUsers.Any())
+        {
+            Console.WriteLine("Найденные пользователи:");
+            foreach (var user in foundUsers)
+            {
+                Console.WriteLine(user);
+            }
+        }
+        else
+        {
+            Console.WriteLine("Пользователи не найдены.");
+        }
+    }
+
+    static void DisplayAllUsers()
+    {
+        Console.WriteLine("Все пользователи:");
+
+        foreach (var filePath in Directory.EnumerateFiles(dataFolderPath))
+        {
+            string fileContent = File.ReadAllText(filePath);
+            Console.WriteLine(fileContent);
+        }
+    }
+}
