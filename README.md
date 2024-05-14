@@ -73,6 +73,7 @@
 </Window>
 
 КОД ПРОГРАММЫ
+
 using System;
 using System.Windows;
 
