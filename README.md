@@ -16,6 +16,7 @@
 -Далее пользователь должен нажать на кнопку "Добавить заказ" , который будет внесён в базу данных.
 
 КОД ИНТЕРФЕЙСА
+
 <Window x:Class="WPFApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -70,6 +71,7 @@
         </ListView>
     </Grid>
 </Window>
+
 КОД ПРОГРАММЫ
 using System;
 using System.Windows;
