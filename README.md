@@ -56,7 +56,7 @@
 КОД ПРОГРАММЫ
 
 
-
+```C#
 
 using System;
 using System.Windows;
@@ -138,7 +138,7 @@ namespace CarServiceApp
         }
     }
 }
-
+```
  
 
 
