@@ -7,10 +7,7 @@
 
 Интерфейс проекта 
 
-![2 (1)](https://github.com/sergey675/WpfApp3/assets/161806606/7fe40995-efe8-4c91-824a-209b3fc211b2)
 
-
-![1](https://github.com/sergey675/WpfApp3/assets/161806606/fa638c46-2d0e-416d-b5c4-d64e3b5ae1bd)
 
 ![image](https://github.com/sergey675/WpfApp3/assets/161806606/738fa516-c565-4963-a1dd-f18219c8ad33)
 
