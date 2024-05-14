@@ -1,0 +1,22 @@
+<Window x:Class="CarServiceApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Car Service App" Height="350" Width="525">
+    <Grid>
+        <TextBox x:Name="txtLastName" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtFirstName" HorizontalAlignment="Left" Height="23" Margin="10,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtPhoneNumber" HorizontalAlignment="Left" Height="23" Margin="10,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btnAddOrder" Content="Добавить заказ" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="120" Click="AddOrder_Click"/>
+        <Button x:Name="btnShowBuyers" Content="Показать клиентов" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Width="120" Click="ShowBuyers"/>
+        <ListView x:Name="buyersListView" HorizontalAlignment="Left" Height="100" Margin="10,160,0,0" VerticalAlignment="Top" Width="500">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="50"/>
+                    <GridViewColumn Header="Фамилия" DisplayMemberBinding="{Binding LastName}" Width="150"/>
+                    <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding FirstName}" Width="150"/>
+                    <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding PhoneNumber}" Width="150"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>

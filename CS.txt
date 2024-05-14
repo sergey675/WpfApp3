@@ -1,0 +1,80 @@
+using System;
+using System.Windows;
+using System.Data.SQLite;
+using System.Collections.Generic;
+
+namespace CarServiceApp
+{
+    public partial class MainWindow : Window
+    {
+        private SQLiteConnection _connection;
+        public MainWindow()
+        {
+            InitializeComponent();
+            InitializeDatabase();
+        }
+        private void InitializeDatabase()
+        {
+            _connection = new SQLiteConnection("Data Source=automasterry.db;Version=3;");
+            _connection.Open();
+            using (var cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS Buyers (Id INTEGER PRIMARY KEY, LastName TEXT, FirstName TEXT, PhoneNumber TEXT)", _connection))
+            {
+                cmd.ExecuteNonQuery();
+            }
+        }
+        private void AddBuyer(string lastName, string firstName, string phoneNumber)
+        {
+            using (var cmd = new SQLiteCommand("INSERT INTO Buyers (LastName, FirstName, PhoneNumber) VALUES (@LastName, @FirstName, @PhoneNumber)", _connection))
+            {
+                cmd.Parameters.AddWithValue("@LastName", lastName);
+                cmd.Parameters.AddWithValue("@FirstName", firstName);
+                cmd.Parameters.AddWithValue("@PhoneNumber", phoneNumber);
+                cmd.ExecuteNonQuery();
+            }
+        }
+        private void AddOrder_Click(object sender, RoutedEventArgs e)
+        {
+            string lastName = txtLastName.Text;
+            string firstName = txtFirstName.Text;
+            string phoneNumber = txtPhoneNumber.Text;
+            using (var cmd = new SQLiteCommand("INSERT INTO Clients (LastName, FirstName, PhoneNumber) VALUES (@LastName, @FirstName, @PhoneNumber)", _connection))
+            {
+                cmd.Parameters.AddWithValue("@LastName", lastName);
+                cmd.Parameters.AddWithValue("@FirstName", firstName);
+                cmd.Parameters.AddWithValue("@PhoneNumber", phoneNumber);
+                cmd.ExecuteNonQuery();
+            }
+            AddBuyer(lastName, firstName, phoneNumber);
+            MessageBox.Show("Заказ успешно добавлен!");
+        }
+        private void ShowBuyers(object sender, RoutedEventArgs e)
+        {
+            using (var cmd = new SQLiteCommand("SELECT * FROM Buyers", _connection))
+            {
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    List<Buyer> buyers = new List<Buyer>();
+                    while (reader.Read())
+                    {
+                        buyers.Add(new Buyer
+                        {
+                            Id = reader.GetInt32(0),
+                            LastName = reader.GetString(1),
+                            FirstName = reader.GetString(2),
+                            PhoneNumber = reader.GetString(3)
+                        });
+                    }
+                    buyersListView.ItemsSource = buyers;
+                }
+            }
+        }
+
+        public class Buyer
+        {
+            public int Id { get; set; }
+            public string LastName { get; set; }
+            public string FirstName { get; set; }
+            public string PhoneNumber { get; set; }
+        }
+    }
+}
